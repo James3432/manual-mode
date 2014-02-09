@@ -14,6 +14,7 @@ $res_object = array();
 $pic_query = 'https://api.500px.com/v1/photos?';
 $pic_query .= 'consumer_key=c7yohCeIPeEPwG52IUqGotl7kFD8tLzLQkBHWt6B';
 $pic_query .= '&feature=popular';
+$pic_query .= '&rpp=40';
 $pics_object = json_decode(file_get_contents($pic_query));
 
 // first photo is from current weather search

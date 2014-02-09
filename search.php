@@ -16,6 +16,7 @@ if(isset($_GET['q'])){
 	$pic_query .= 'consumer_key=c7yohCeIPeEPwG52IUqGotl7kFD8tLzLQkBHWt6B';
 	$pic_query .= '&term=';
 	$pic_query .= urlencode($search);
+	$pic_query .= '&sort=rating';
 	$pics_object = json_decode(file_get_contents($pic_query));
 
 	foreach ($pics_object->photos as $photo_object) {
@@ -45,12 +46,50 @@ if(isset($_GET['q'])){
 		}else
 			$ratio = $exif->width / $exif->height;
 		
-		//echo $ratio;
+		$int_aperture = (float)(end(explode('/', $res_object['aperture'])));
+	if ($int_aperture >= 9) {
+		$res_object['aperture_description'] = "Small aperture\nLess light\nEverything in focus";
+	} elseif ($int_aperture >= 4) {
+		$res_object['aperture_description'] = "Medium aperture\nAverage amount of light\nSlight background blur";
+	} else {
+		$res_object['aperture_description'] = "Wide aperture\nLots of light\nBlurred background";
+	}
+
+	$sh_array = explode('/', $res_object['shutter_speed']);
+	if (count($sh_array) == 1) {
+		$num_shutter = $sh_array[0];
+	} else {
+		$num_shutter = $sh_array[0]/$sh_array[1];
+	}
+	if ($num_shutter <= 0.001) {
+		$res_object['shutter_speed_description'] = "Fast shutter\nLess light\nFreezes motion";
+	} elseif ($num_shutter <= 0.017) {
+		$res_object['shutter_speed_description'] = "Medium shutter\nAverage amount of light\nSlight motion blur";
+	} elseif ($num_shutter <= 0.07) {
+		$res_object['shutter_speed_description'] = "Slow shutter\nLots of light\nBlurred motion";
+	} else {
+		$res_object['shutter_speed_description'] = "Very slow shutter\nLots of light\nUse a tripod";
+	}
+
+	$int_iso = (int)($res_object['iso']);
+	if ($int_iso >= 1600) {
+		$res_object['iso_description'] = "High sensitivity";
+	} elseif ($int_iso >= 400) {
+		$res_object['iso_description'] = "Medium sensitivity";
+	} else {
+		$res_object['iso_description'] = "Low sensitivity";
+	}
+
+	$int_focal_length = (int)($res_object['focal_length']);
+	if ($int_focal_length >= 100) {
+		$res_object['focal_length_description'] = "High zoom";
+	} elseif ($int_focal_length >= 20) {
+		$res_object['focal_length_description'] = "Medium zoom";
+	} else {
+		$res_object['focal_length_description'] = "Zoomed out";
+	}
 		
-		//echo $exif->image_url;
-		//print_r($exif);
-		
-		if( ($ratio > 1.2) && ($ratio < 1.55) && isset($res_object['url']) && isset($res_object['aperture']) && isset($res_object['shutter_speed']) && isset($res_object['iso']) && isset($res_object['focal_length'])){ 
+		if( ($ratio > 1.2) && ($ratio < 1.55) && isset($res_object['url']) && isset($res_object['aperture']) && isset($res_object['shutter_speed']) && isset($res_object['iso']) && isset($res_object['focal_length']) &&!empty($res_object['url']) &&!empty($res_object['aperture']) &&!empty($res_object['shutter_speed']) &&!empty($res_object['iso']) &&!empty($res_object['focal_length']) ){ 
 			$res_array[] = $res_object;
 		}
 	}

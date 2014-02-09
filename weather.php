@@ -27,6 +27,7 @@ $pic_query = 'https://api.500px.com/v1/photos/search?';
 $pic_query .= 'consumer_key=c7yohCeIPeEPwG52IUqGotl7kFD8tLzLQkBHWt6B';
 $pic_query .= '&term=';
 $pic_query .= urlencode($weatherstring);
+$pic_query .= '&sort=rating';
 $pics_object = json_decode(file_get_contents($pic_query));
 
 foreach ($pics_object->photos as $photo_object) {
@@ -67,7 +68,7 @@ foreach ($pics_object->photos as $photo_object) {
 	}
 }
 
-$int_aperture = (float)(end(explode('/', $weatherphoto['aperture'])));
+	$int_aperture = (float)(end(explode('/', $weatherphoto['aperture'])));
 	if ($int_aperture >= 9) {
 		$weatherphoto['aperture_description'] = "Small aperture\nLess light\nEverything in focus";
 	} elseif ($int_aperture >= 4) {
@@ -76,7 +77,21 @@ $int_aperture = (float)(end(explode('/', $weatherphoto['aperture'])));
 		$weatherphoto['aperture_description'] = "Wide aperture\nLots of light\nBlurred background";
 	}
 
-	$weatherphoto['shutter_speed_description'] = "Fast shutter\nLess light\nFreezes motion";
+	$sh_array = explode('/', $weatherphoto['shutter_speed']);
+	if (count($sh_array) == 1) {
+		$num_shutter = $sh_array[0];
+	} else {
+		$num_shutter = $sh_array[0]/$sh_array[1];
+	}
+	if ($num_shutter <= 0.001) {
+		$weatherphoto['shutter_speed_description'] = "Fast shutter\nLess light\nFreezes motion";
+	} elseif ($num_shutter <= 0.017) {
+		$weatherphoto['shutter_speed_description'] = "Medium shutter\nAverage amount of light\nSlight motion blur";
+	} elseif ($num_shutter <= 0.07) {
+		$weatherphoto['shutter_speed_description'] = "Slow shutter\nLots of light\nBlurred motion";
+	} else {
+		$weatherphoto['shutter_speed_description'] = "Very slow shutter\nLots of light\nUse a tripod";
+	}
 
 	$int_iso = (int)($weatherphoto['iso']);
 	if ($int_iso >= 1600) {
