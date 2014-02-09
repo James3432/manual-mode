@@ -67,7 +67,14 @@ foreach ($pics_object->photos as $photo_object) {
 		$res_object['iso_description'] = "Low sensitivity";
 	}
 
-	$res_object['focal_length_description'] = "High zoom";
+	$int_focal_length = (int)($exif->focal_length);
+	if ($int_focal_length >= 100) {
+		$res_object['focal_length_description'] = "High zoom";
+	} elseif ($int_focal_length >= 20) {
+		$res_object['focal_length_description'] = "Medium zoom";
+	} else {
+		$res_object['focal_length_description'] = "Zoomed out";
+	}
 	
 	//echo $ratio;
 	
