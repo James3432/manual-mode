@@ -1,5 +1,5 @@
 <?php
 
-echo(file_get_contents("cache.json"));
+echo(json_encode(json_decode(file_get_contents("cache.json"),true)));
 
 ?>

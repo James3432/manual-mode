@@ -9,76 +9,48 @@ if($DEBUG){
 $res_array = array();
 $res_object = array();
 
-/*
-$flickr_query = 'http://api.flickr.com/services/rest/?';
-$flickr_query .= '&method=flickr.photos.search';
-$flickr_query .= '&format=json&nojsoncallback=1';
-$flickr_query .= '&api_key=91ffacfe5d47d2dc09282c43f9fe1477';
-$flickr_query .= '&sort=relevance';
-$flickr_query .= '&license=1';
-$flickr_query .= '&text=' . $reference;
-$flickr_query .= '&per_page=';
-$flickr_query .= '3';
-*/
-$flickr_query = 'http://api.flickr.com/services/rest/?';
-$flickr_query .= '&method=flickr.interestingness.getList';
-$flickr_query .= '&format=json&nojsoncallback=1';
-$flickr_query .= '&api_key=91ffacfe5d47d2dc09282c43f9fe1477';
-$flickr_query .= '&sort=views';
-$flickr_query .= '&per_page=10';
-$flickr_query .= '&license=1';
-$flickr_object = json_decode(file_get_contents($flickr_query));
+$pic_query = 'https://api.500px.com/v1/photos?';
+$pic_query .= 'consumer_key=c7yohCeIPeEPwG52IUqGotl7kFD8tLzLQkBHWt6B';
+$pic_query .= '&feature=popular';
+$pics_object = json_decode(file_get_contents($pic_query));
 
-foreach ($flickr_object->photos->photo as $photo_object) {
+foreach ($pics_object->photos as $photo_object) {
 	$res_object = array();
-	//$res_object['id'] = $photo_object->id;
+	$res_object['id'] = $photo_object->id;
 
-	$exif_query = 'http://api.flickr.com/services/rest/?';
-	$exif_query .= '&method=flickr.photos.getExif';
-	$exif_query .= '&format=json&nojsoncallback=1';
-	$exif_query .= '&photo_id=';
-	$exif_query .= $photo_object->id;
-	$exif_query .= '&api_key=91ffacfe5d47d2dc09282c43f9fe1477';
-
+	$exif_query = 'https://api.500px.com/v1/photos/';
+	$exif_query .= $res_object['id'];
+	$exif_query .= '?consumer_key=c7yohCeIPeEPwG52IUqGotl7kFD8tLzLQkBHWt6B';
 	$exif_json = file_get_contents($exif_query);
 	$exif_object = json_decode($exif_json);
-
-	$res_object['url'] = 'http://farm' . $photo_object->farm . '.staticflickr.com/' . $photo_object->server . '/' . $photo_object->id . '_' . $photo_object->secret . '_b.jpg';
+	$exif = $exif_object->photo;
+	
+	$res_object['url'] = $exif->image_url;
+	$res_object['aperture'] = $exif->aperture;
+	$res_object['shutter_speed'] = $exif->shutter_speed;
+	$res_object['iso'] = $exif->iso;
+	$res_object['focal_length'] = $exif->focal_length;
+	$res_object['camera'] = $exif->camera;
 	
 	if($DEBUG){
 		echo("<p><img src=\"".$res_object['url']."\"></img></p>");
 	}
-
-	if ($exif_object->stat == 'ok') {
-		foreach ($exif_object->photo->exif as $exif) {
-			
-			if ($exif->tag == 'FNumber') {
-				$res_object['aperture'] = $exif->clean->_content;
-			}
-			elseif ($exif->tag == 'ExposureTime') {
-				$res_object['shutter_speed'] = "1/"+$exif->clean->_content;
-			}
-			elseif ($exif->tag == 'CameraISO' || $exif->tag == 'ISO') {
-				$res_object['iso'] = $exif->raw->_content;
-			}
-			elseif ($exif->tag == 'FocalLength') {
-				$res_object['focal_length'] = $exif->raw->_content;
-			}
-			elseif ($exif->tag == 'Model') {
-				$res_object['camera'] = $exif->raw->_content;
-			}
-		}
-	}
 	
-	$size = getimagesize($res_object['url']);
-	$ratio = $size[0] / $size[1];
+	if($exif->height == 0){ 
+		$ratio = 0;
+	}else
+		$ratio = $exif->width / $exif->height;
+	
 	//echo $ratio;
+	
+	//echo $exif->image_url;
+	//print_r($exif);
 	
 	if( ($ratio > 1.2) && ($ratio < 1.55) && isset($res_object['url']) && isset($res_object['aperture']) && isset($res_object['shutter_speed']) && isset($res_object['iso']) && isset($res_object['focal_length'])){ 
 		$res_array[] = $res_object;
 	}
 }
-
+//print_r($res_array);
 //echo json_encode($res_array);
 
 $fp = fopen('cache.json', 'w');
@@ -89,7 +61,6 @@ if($DEBUG){
 	echo "</body></html>";
 }
 
+echo "Done: " . count($res_array) . " photos pulled.";
+
 ?>
-
-Done.
-
