@@ -11,7 +11,7 @@ $hour = $time->format('H');
 if($hour > 6 && $hour < 9){
 	$timeofday = 'sunrise ';
 }elseif($hour >= 9 && $hour < 18){
-	$timeofday = 'day time ';
+	$timeofday = 'day ';
 }elseif($hour >= 18 && $hour < 21){
 	$timeofday = 'sunset ';
 }else{
