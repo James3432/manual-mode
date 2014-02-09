@@ -14,7 +14,7 @@ $res_object = array();
 $pic_query = 'https://api.500px.com/v1/photos?';
 $pic_query .= 'consumer_key=c7yohCeIPeEPwG52IUqGotl7kFD8tLzLQkBHWt6B';
 $pic_query .= '&feature=popular';
-$pic_query .= '&rpp=40';
+$pic_query .= '&rpp=30';
 $pics_object = json_decode(file_get_contents($pic_query));
 
 // first photo is from current weather search
@@ -33,7 +33,7 @@ foreach ($pics_object->photos as $photo_object) {
 	
 	$res_object['url'] = $exif->image_url;
 	$res_object['aperture'] = str_replace(',','.',$exif->aperture);
-	$res_object['shutter_speed'] = $exif->shutter_speed;
+	$res_object['shutter_speed'] = str_replace(' ','',str_replace('.','',preg_replace('/[a-zA-Z]/', ' ', $exif->shutter_speed)));
 	$res_object['iso'] = $exif->iso;
 	$res_object['focal_length'] = $exif->focal_length;
 	$res_object['camera'] = $exif->camera;
