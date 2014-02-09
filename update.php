@@ -38,8 +38,14 @@ foreach ($pics_object->photos as $photo_object) {
 	
 	if($exif->height == 0){ 
 		$ratio = 0;
-	}else
+	} else {
 		$ratio = $exif->width / $exif->height;
+	}
+
+	$res_object['aperture_description'] = "Small aperture\nLess light\nEverything in focus";
+	$res_object['shutter_speed_description'] = "Fast shutter\nLess light\nFreezes motion";
+	$res_object['iso_description'] = "Low sensitivity";
+	$res_object['focal_length_description'] = "High zoom";
 	
 	//echo $ratio;
 	
