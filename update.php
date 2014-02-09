@@ -32,10 +32,10 @@ foreach ($pics_object->photos as $photo_object) {
 	$exif = $exif_object->photo;
 	
 	$res_object['url'] = $exif->image_url;
-	$res_object['aperture'] = str_replace(',','.',$exif->aperture);
+	$res_object['aperture'] = str_replace(' ','',str_replace(',','.', preg_replace('/[a-zA-Z]/', ' ', $exif->aperture)));
 	$res_object['shutter_speed'] = str_replace(' ','',str_replace('.','',preg_replace('/[a-zA-Z]/', ' ', $exif->shutter_speed)));
 	$res_object['iso'] = $exif->iso;
-	$res_object['focal_length'] = $exif->focal_length;
+	$res_object['focal_length'] = str_replace(' ','',str_replace('.','',preg_replace('/[a-zA-Z]/', ' ', $exif->focal_length)));
 	$res_object['camera'] = $exif->camera;
 	
 	if($DEBUG){
