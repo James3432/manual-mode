@@ -52,7 +52,7 @@ foreach ($pics_object->photos as $photo_object) {
 	if ($int_aperture >= 9) {
 		$res_object['aperture_description'] = "Small aperture\nLess light\nEverything in focus";
 	} elseif ($int_aperture >= 4) {
-		$res_object['aperture_description'] = "Medium aperture\nMedium light amount\nSlight background blur";
+		$res_object['aperture_description'] = "Medium aperture\nSlight background blur";
 	} else {
 		$res_object['aperture_description'] = "Wide aperture\nLots of light\nBlurred background";
 	}
@@ -66,7 +66,7 @@ foreach ($pics_object->photos as $photo_object) {
 	if ($num_shutter <= 0.001) {
 		$res_object['shutter_speed_description'] = "Fast shutter\nLess light\nFreezes motion";
 	} elseif ($num_shutter <= 0.017) {
-		$res_object['shutter_speed_description'] = "Medium shutter\nMedium light amount\nSlight motion blur";
+		$res_object['shutter_speed_description'] = "Medium shutter\nSlight motion blur";
 	} elseif ($num_shutter <= 0.07) {
 		$res_object['shutter_speed_description'] = "Slow shutter\nLots of light\nBlurred motion";
 	} else {
