@@ -44,7 +44,16 @@ foreach ($pics_object->photos as $photo_object) {
 
 	$res_object['aperture_description'] = "Small aperture\nLess light\nEverything in focus";
 	$res_object['shutter_speed_description'] = "Fast shutter\nLess light\nFreezes motion";
-	$res_object['iso_description'] = "Low sensitivity";
+
+	$int_iso = (int)($exif->iso);
+	if ($int_iso >= 1600) {
+		$res_object['iso_description'] = "High sensitivity";
+	} elseif ($int_iso >= 400) {
+		$res_object['iso_description'] = "Medium sensitivity";
+	} else {
+		$res_object['iso_description'] = "Low sensitivity";
+	}
+
 	$res_object['focal_length_description'] = "High zoom";
 	
 	//echo $ratio;
