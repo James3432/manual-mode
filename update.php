@@ -47,7 +47,15 @@ foreach ($pics_object->photos as $photo_object) {
 		$ratio = $exif->width / $exif->height;
 	}
 
-	$res_object['aperture_description'] = "Small aperture\nLess light\nEverything in focus";
+	$int_aperture = (float)(end(explode('/', $exif->aperture)));
+	if ($int_aperture >= 9) {
+		$res_object['aperture_description'] = "Small aperture\nLess light\nEverything in focus";
+	} elseif ($int_aperture >= 4) {
+		$res_object['aperture_description'] = "Medium aperture\nAverage amount of light\nSlight background blur";
+	} else {
+		$res_object['aperture_description'] = "Wide aperture\nLots of light\nBlurred background";
+	}
+
 	$res_object['shutter_speed_description'] = "Fast shutter\nLess light\nFreezes motion";
 
 	$int_iso = (int)($exif->iso);
