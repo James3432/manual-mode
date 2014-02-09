@@ -15,7 +15,7 @@ if(isset($_GET['q'])){
 	$pic_query = 'https://api.500px.com/v1/photos/search?';
 	$pic_query .= 'consumer_key=c7yohCeIPeEPwG52IUqGotl7kFD8tLzLQkBHWt6B';
 	$pic_query .= '&term=';
-	$pic_query .= $search;
+	$pic_query .= urlencode($search);
 	$pics_object = json_decode(file_get_contents($pic_query));
 
 	foreach ($pics_object->photos as $photo_object) {
