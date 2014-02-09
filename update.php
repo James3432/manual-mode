@@ -95,7 +95,7 @@ foreach ($pics_object->photos as $photo_object) {
 	//echo $exif->image_url;
 	//print_r($exif);
 	
-	if( ($ratio > 1.2) && ($ratio < 1.55) && isset($res_object['url']) && isset($res_object['aperture']) && isset($res_object['shutter_speed']) && isset($res_object['iso']) && isset($res_object['focal_length'])){ 
+	if( ($ratio > 1.2) && ($ratio < 1.55) && isset($res_object['url']) && isset($res_object['aperture']) && isset($res_object['shutter_speed']) && isset($res_object['iso']) && isset($res_object['focal_length']) &&!empty($res_object['url']) &&!empty($res_object['aperture']) &&!empty($res_object['shutter_speed']) &&!empty($res_object['iso']) &&!empty($res_object['focal_length']) ){ 
 		$res_array[] = $res_object;
 	}
 }

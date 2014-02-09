@@ -67,5 +67,34 @@ foreach ($pics_object->photos as $photo_object) {
 	}
 }
 
+$int_aperture = (float)(end(explode('/', $weatherphoto['aperture'])));
+	if ($int_aperture >= 9) {
+		$weatherphoto['aperture_description'] = "Small aperture\nLess light\nEverything in focus";
+	} elseif ($int_aperture >= 4) {
+		$weatherphoto['aperture_description'] = "Medium aperture\nAverage amount of light\nSlight background blur";
+	} else {
+		$weatherphoto['aperture_description'] = "Wide aperture\nLots of light\nBlurred background";
+	}
+
+	$weatherphoto['shutter_speed_description'] = "Fast shutter\nLess light\nFreezes motion";
+
+	$int_iso = (int)($weatherphoto['iso']);
+	if ($int_iso >= 1600) {
+		$weatherphoto['iso_description'] = "High sensitivity";
+	} elseif ($int_iso >= 400) {
+		$weatherphoto['iso_description'] = "Medium sensitivity";
+	} else {
+		$weatherphoto['iso_description'] = "Low sensitivity";
+	}
+
+	$int_focal_length = (int)($weatherphoto['focal_length']);
+	if ($int_focal_length >= 100) {
+		$weatherphoto['focal_length_description'] = "High zoom";
+	} elseif ($int_focal_length >= 20) {
+		$weatherphoto['focal_length_description'] = "Medium zoom";
+	} else {
+		$weatherphoto['focal_length_description'] = "Zoomed out";
+	}
+
 
 ?>
