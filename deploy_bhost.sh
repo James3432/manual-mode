@@ -1,0 +1,1 @@
+rsync -rv api root@78.129.251.205:/var/www/html
